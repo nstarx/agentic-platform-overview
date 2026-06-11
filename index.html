@@ -193,16 +193,16 @@
   <div class="wrap">
     <h1>Build, debug, and ship <span>AI agents</span> —<br>on infrastructure you own.</h1>
     <p class="lede">
-      A self-hosted platform for designing LLM-driven workflows on a visual canvas, debugging them
-      step-by-step like code, and deploying them as self-contained agents — to your own hosts,
-      AWS Lambda, or AWS App Runner — with full audit, feedback, and fleet management built in.
+      A self-hosted platform for small technical teams whose data can't leave their perimeter.
+      Design LLM workflows on a visual canvas, debug them step-by-step like code, and deploy them
+      as self-contained agents — to your own hosts or your own AWS account — with every run audited.
     </p>
     <div class="stats">
       <div class="stat"><b>15+</b><span>node types incl. control flow</span></div>
       <div class="stat"><b>10×</b><span>faster prompt iteration via pin-replay debug</span></div>
       <div class="stat"><b>5</b><span>deploy targets — 3 fully automated</span></div>
       <div class="stat"><b>100%</b><span>runs audited, end to end</span></div>
-      <div class="stat"><b>0</b><span>per-seat licence fees</span></div>
+      <div class="stat"><b>1</b><span>engineer can own it part-time</span></div>
     </div>
   </div>
 </header>
@@ -211,45 +211,111 @@
 <section id="business">
   <div class="wrap">
     <span class="eyebrow">For decision makers</span>
-    <h2>High-level business outcomes</h2>
-    <p class="sub">What the platform changes for an organisation, in plain terms.</p>
+    <h2>The business case, honestly</h2>
+    <p class="sub">Who this is for, what it actually costs, what you get — and when you should buy
+    something else instead.</p>
 
+    <h3>Who this is built for</h3>
+    <div class="grid c3">
+      <div class="card">
+        <h4>🎯 A small technical team</h4>
+        <p>5–50 people, at least one engineer who can own a Docker stack part-time. The platform is
+        operated by that team — there are no internal user roles to administer, because there is
+        nothing to administer between people who already share a repo.</p>
+      </div>
+      <div class="card">
+        <h4>🔒 Data that can't leave</h4>
+        <p>HR records, legal documents, client data, anything under residency or confidentiality
+        constraints. Documents, embeddings, run history, and audit logs all live in <em>your</em>
+        Postgres. The only external call is to the LLM provider you configure — and even that can be
+        routed through your own AWS account.</p>
+      </div>
+      <div class="card">
+        <h4>🛠️ A preference for owning over renting</h4>
+        <p>Workflows are plain JSON on an open stack (LangGraph/LangChain). If this platform
+        disappeared tomorrow, your flows, your data, and your deployed agents keep running — they are
+        containers in your infrastructure, not rows in someone else's SaaS.</p>
+      </div>
+    </div>
+
+    <h3>What it costs — all of it</h3>
+    <div class="tbl-scroll"><table>
+      <tr><th>Cost line</th><th>Amount</th><th>Notes</th></tr>
+      <tr><td>Licence</td><td><b>$0</b></td><td>No seats, no execution quotas, no enterprise tier.</td></tr>
+      <tr><td>Platform hosting</td><td>$0–12 / month</td><td>A workstation you already own, or one small VM.</td></tr>
+      <tr><td>Per deployed agent</td><td>$0–10 / month</td><td>$0 on your own host; ~$0.25–13 on AWS Lambda at realistic volumes; ~$5–10 on App Runner.</td></tr>
+      <tr><td>LLM tokens</td><td>usage-based</td><td>You pay your provider directly, at provider list price — no markup, no middleman. Per-run cost is tracked in the audit trail.</td></tr>
+      <tr><td><b>The honest line: your engineer's time</b></td><td>~2–4 h / month</td><td>Updates, backups, the occasional restart. This is the real price of self-hosting, and it's the line vendors selling you SaaS won't put in their table.</td></tr>
+    </table></div>
+    <p style="font-size:.85rem;color:var(--muted);margin-top:10px">
+      For comparison: n8n cloud starts around $50/month per instance and gates SSO + RBAC behind an
+      enterprise licence; managed agent platforms bill per request on top of tokens. Whether the
+      delta pays for the maintenance hours above is a genuine calculation — for a team already
+      running Docker, it usually does; for a team with no ops capacity, it usually doesn't.
+    </p>
+
+    <h3>What you get</h3>
     <div class="grid c2">
       <div class="card">
-        <h4>💰 Replace per-workflow SaaS fees with owned infrastructure</h4>
-        <p>n8n enterprise, Zapier, and managed agent platforms charge per seat, per execution, or per
-        workflow. This platform runs on hardware you already own (a workstation, a $7–12/month VM, or
-        pay-per-use AWS serverless). The only recurring cost is LLM tokens — which you would pay anyway.</p>
+        <h4>⚡ A working agent in a day, not a quarter</h4>
+        <p>Proof, not promise: a real hiring pipeline — résumé screener, job-description drafter,
+        interview briefer, onboarding FAQ grounded on internal policy documents — runs in production
+        on this platform today. Each agent went from idea to deployed URL in hours.</p>
       </div>
       <div class="card">
-        <h4>🔒 Data never leaves your perimeter unless you choose</h4>
-        <p>Self-hosted Postgres, self-hosted engine, agents deployable inside your own network. Documents
-        ingested into knowledge graphs stay in your database. The audit trail records <em>everything</em> —
-        inputs, outputs, per-node events — with no third party in the loop.</p>
+        <h4>📉 LLM spend you can see and act on</h4>
+        <p>Every run records tokens and cost per node. During development — the expensive phase —
+        the debugger replays cached outputs instead of re-calling the model, cutting iteration cost
+        roughly 4–10×. You'll know which agent costs what before the invoice does.</p>
       </div>
       <div class="card">
-        <h4>⚡ Internal automation shipped in hours, not sprints</h4>
-        <p>A working agent — e.g. an HR FAQ bot grounded on your policy documents, with guardrails — is a
-        drag-and-drop exercise plus one click to deploy. Real example: a hiring pipeline (résumé screener,
-        JD drafter, interview briefer, onboarding FAQ) runs in production on this platform today.</p>
+        <h4>📜 An audit trail that satisfies "show me"</h4>
+        <p>Inputs, outputs, every intermediate step, timestamped, queryable. When someone asks why
+        the agent said what it said — to a candidate, a client, an auditor — you answer from the
+        record, not from memory. Agents keep logging even when disconnected; events sync when the
+        link returns.</p>
       </div>
       <div class="card">
-        <h4>📉 LLM spend is visible and controllable</h4>
-        <p>Per-run and per-node token + cost tracking flows into the audit store. The step-debugger replays
-        cached node outputs instead of re-calling the LLM, cutting iteration cost roughly 4–10× during
-        development — the most expensive phase of agent building.</p>
+        <h4>👍 An evidence-based kill switch</h4>
+        <p>Deployed agents collect end-user votes. Each agent accumulates a score and a
+        Keep / Iterate / Retire recommendation — so the decision to keep an agent alive is made on
+        usage data, not on the enthusiasm of whoever built it.</p>
+      </div>
+    </div>
+
+    <h3>Security model: your auth, not ours</h3>
+    <div class="card" style="margin-bottom:18px">
+      <p>The platform deliberately does <b>not</b> ship its own identity system. It sits behind the
+      authentication you already run — a reverse proxy (oauth2-proxy with any IdP: Okta, Entra,
+      Google Workspace), a VPN, or a private network. That is how it runs in production today.
+      Deployed agents authenticate machine-to-machine with per-agent bearer keys, rotatable in one
+      click.</p>
+      <p style="margin-top:8px">What this means in practice: <b>access control is at the perimeter,
+      not per-user inside the app.</b> Everyone behind the proxy is a trusted operator. For a small
+      team that already shares production access, this matches reality. If you need per-user
+      permissions <em>inside</em> the platform — approval chains, role separation, per-team
+      workspaces — that does not exist yet, and you should weigh that honestly (see below).</p>
+    </div>
+
+    <h3>When you should buy something else</h3>
+    <div class="grid c3">
+      <div class="card">
+        <h4>❌ You need internal role separation</h4>
+        <p>Multiple departments, permission boundaries between users, compliance-mandated
+        segregation of duties inside the tool. There is no per-user RBAC. Today the honest answer
+        is n8n enterprise or a managed platform.</p>
       </div>
       <div class="card">
-        <h4>👍 Quality is measured, not assumed</h4>
-        <p>Deployed agents can collect end-user feedback (👍/👎 + comments). Votes stream back to a central
-        inbox with batch analysis and a Keep / Iterate / Retire recommendation per agent — an evidence-based
-        lifecycle instead of "we think it works".</p>
+        <h4>❌ You need 400 SaaS connectors</h4>
+        <p>If the job is "sync Salesforce to HubSpot to Slack", buy n8n or Zapier — their connector
+        catalogs are a decade of work this platform does not replicate. MCP tools + a generic HTTP
+        node cover a lot, but not that.</p>
       </div>
       <div class="card">
-        <h4>🚪 No vendor lock-in, at any layer</h4>
-        <p>Workflows are plain JSON. The engine is LangGraph/LangChain — the most widely adopted open agent
-        stack. LLM providers are swappable per node (Anthropic, OpenAI, Google). Deploy targets range from a
-        laptop to AWS. Every component can be replaced independently.</p>
+        <h4>❌ You have no one to own it</h4>
+        <p>Self-hosted means someone updates it, backs it up, and answers when it pages. If no
+        engineer on the team wants that job, a managed platform's fees are cheaper than the
+        alternative.</p>
       </div>
     </div>
   </div>
@@ -616,7 +682,7 @@ curl -X POST $PLATFORM/api/v1/agentic/deploy/apprunner/execute \
       <div class="card con">
         <h4>⚠️ Where it doesn't (yet)</h4>
         <ul>
-          <li><b>Single-admin</b> — no multi-user RBAC or SSO yet; wrong fit for large shared teams today.</li>
+          <li><b>No per-user RBAC inside the platform</b> — auth is at the perimeter (your reverse proxy / IdP / VPN); everyone behind it is a trusted operator. Right model for a small team, wrong for orgs needing internal permission boundaries.</li>
           <li><b>Single-host scheduling</b> — no queue mode / horizontal workers; ~hundreds of runs/hour, not tens of thousands.</li>
           <li><b>Shared-engine runs are in-memory</b> — the runs list resets on engine restart (audit DB keeps the durable history; checkpoints survive but live resume context doesn't yet).</li>
           <li><b>Integration breadth</b> — MCP + HTTP node cover a lot, but there is no 400-connector catalog like n8n/Zapier.</li>
@@ -649,7 +715,7 @@ curl -X POST $PLATFORM/api/v1/agentic/deploy/apprunner/execute \
       <tr><td><b>RAG / grounding</b></td><td>pgvector + offline Lance bundles</td><td>via nodes/external</td><td>managed KB (S3 + OpenSearch)</td><td>DIY</td></tr>
       <tr><td><b>One-click deploy of an agent</b></td><td>✅ own host / Lambda / App Runner</td><td>n/a (workflows live in n8n)</td><td>✅ (inside Bedrock)</td><td>DIY</td></tr>
       <tr><td><b>Audit &amp; feedback loop</b></td><td>✅ built-in, edge-buffered</td><td>execution log</td><td>CloudWatch/CloudTrail</td><td>DIY</td></tr>
-      <tr><td><b>Multi-user / SSO</b></td><td>❌ yet</td><td>✅ (paid)</td><td>✅ IAM</td><td>DIY</td></tr>
+      <tr><td><b>Auth model</b></td><td>Perimeter (your proxy/IdP/VPN); no internal RBAC</td><td>Built-in users; SSO/RBAC paid</td><td>AWS IAM</td><td>DIY</td></tr>
       <tr><td><b>Honest verdict</b></td><td>Best for owned, debuggable, deployable AI agents</td><td>Best for broad SaaS-to-SaaS automation</td><td>Best for AWS-native teams wanting zero platform maintenance</td><td>Best when you need something none of these do</td></tr>
     </table></div>
   </div>
