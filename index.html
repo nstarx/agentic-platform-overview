@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Platform — Overview, Manual &amp; API Reference</title>
+<style>
+  :root {
+    --ink: #1e293b;
+    --muted: #64748b;
+    --soft: #94a3b8;
+    --line: #e2e8f0;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --indigo: #6366f1;
+    --indigo-soft: #eef2ff;
+    --green: #059669;
+    --green-soft: #ecfdf5;
+    --amber: #b45309;
+    --amber-soft: #fffbeb;
+    --rose: #be123c;
+    --rose-soft: #fff1f2;
+    --blue: #1d4ed8;
+    --blue-soft: #eff6ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.65;
+  }
+  code, pre {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  }
+  code {
+    background: rgba(100,116,139,.12);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: .85em;
+  }
+  pre {
+    background: #0f172a0d;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    overflow-x: auto;
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  pre code { background: none; padding: 0; }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+  section { padding: 56px 0; }
+  section + section { border-top: 1px solid var(--line); }
+
+  /* ---------- nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display: flex; align-items: center; gap: 18px; height: 56px; }
+  nav .brand { font-weight: 700; font-size: .95rem; color: var(--indigo); white-space: nowrap; }
+  nav a { color: var(--muted); text-decoration: none; font-size: .8rem; white-space: nowrap; }
+  nav a:hover { color: var(--ink); }
+  nav .links { display: flex; gap: 16px; overflow-x: auto; }
+
+  /* ---------- hero ---------- */
+  header.hero {
+    background: linear-gradient(165deg, #eef2ff 0%, #f8fafc 55%, #ecfdf5 100%);
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero h1 { font-size: 2.4rem; line-height: 1.2; letter-spacing: -.02em; }
+  .hero h1 span { color: var(--indigo); }
+  .hero p.lede { font-size: 1.1rem; color: var(--muted); max-width: 760px; margin-top: 14px; }
+  .hero .stats { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 20px; min-width: 150px;
+  }
+  .stat b { display: block; font-size: 1.35rem; color: var(--indigo); }
+  .stat span { font-size: .78rem; color: var(--muted); }
+
+  /* ---------- headings ---------- */
+  h2 { font-size: 1.6rem; letter-spacing: -.01em; margin-bottom: 6px; }
+  h2 + p.sub { color: var(--muted); margin-bottom: 28px; max-width: 780px; }
+  h3 { font-size: 1.05rem; margin: 26px 0 10px; }
+  .eyebrow {
+    display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--indigo); margin-bottom: 8px;
+  }
+
+  /* ---------- cards ---------- */
+  .grid { display: grid; gap: 16px; }
+  .grid.c2 { grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); }
+  .grid.c3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .card h4 { font-size: .95rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .card p, .card li { font-size: .86rem; color: var(--muted); }
+  .card ul { padding-left: 18px; margin-top: 6px; }
+  .card li { margin-bottom: 4px; }
+  .pill {
+    display: inline-block; font-size: .68rem; font-weight: 700; padding: 2px 10px;
+    border-radius: 999px; letter-spacing: .03em;
+  }
+  .pill.green { background: var(--green-soft); color: var(--green); }
+  .pill.amber { background: var(--amber-soft); color: var(--amber); }
+  .pill.indigo { background: var(--indigo-soft); color: var(--indigo); }
+  .pill.blue { background: var(--blue-soft); color: var(--blue); }
+  .pill.rose { background: var(--rose-soft); color: var(--rose); }
+
+  /* ---------- tables ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: .84rem; background: var(--card); border-radius: 12px; overflow: hidden; }
+  th, td { border: 1px solid var(--line); padding: 9px 13px; text-align: left; vertical-align: top; }
+  th { background: #f1f5f9; font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  td code { white-space: nowrap; }
+  .tbl-scroll { overflow-x: auto; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+  tr:nth-child(even) td { background: #fbfdff; }
+
+  /* ---------- pro/con ---------- */
+  .procon { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 16px; }
+  .procon .card.pro { border-top: 4px solid var(--green); }
+  .procon .card.con { border-top: 4px solid var(--rose); }
+
+  /* ---------- flow diagram ---------- */
+  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; margin: 18px 0; }
+  .flow .node {
+    flex: 1; min-width: 130px; background: var(--card); border: 1.5px solid var(--line);
+    border-radius: 10px; padding: 12px 14px; text-align: center;
+  }
+  .flow .node b { display: block; font-size: .82rem; }
+  .flow .node span { font-size: .7rem; color: var(--muted); }
+  .flow .arrow { align-self: center; color: var(--soft); font-size: 1.1rem; }
+  .flow .node.hl { border-color: var(--indigo); background: var(--indigo-soft); }
+
+  /* ---------- steps ---------- */
+  ol.steps { counter-reset: step; list-style: none; }
+  ol.steps > li {
+    counter-increment: step; position: relative; padding: 0 0 22px 52px; font-size: .9rem;
+  }
+  ol.steps > li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 0;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--indigo-soft); color: var(--indigo);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .9rem;
+  }
+  ol.steps > li b { display: block; margin-bottom: 4px; }
+  ol.steps > li p { color: var(--muted); font-size: .85rem; }
+
+  footer { padding: 40px 0 56px; color: var(--soft); font-size: .78rem; text-align: center; }
+  .note {
+    background: var(--amber-soft); border: 1px solid #fde68a; border-radius: 10px;
+    padding: 12px 16px; font-size: .84rem; color: var(--amber); margin: 14px 0;
+  }
+  .tip {
+    background: var(--blue-soft); border: 1px solid #bfdbfe; border-radius: 10px;
+    padding: 12px 16px; font-size: .84rem; color: var(--blue); margin: 14px 0;
+  }
+  @media print { nav { display: none; } section { page-break-inside: avoid; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">⚡ Agentic Platform</span>
+    <div class="links">
+      <a href="#business">Business</a>
+      <a href="#engineering">Engineering</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#features">Features</a>
+      <a href="#agents-build-agents">Agents-build-Agents</a>
+      <a href="#api">API Reference</a>
+      <a href="#deploy">Deploy Targets</a>
+      <a href="#procon">Pros &amp; Cons</a>
+      <a href="#compare">Comparison</a>
+      <a href="#quickstart">Quickstart</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Build, debug, and ship <span>AI agents</span> —<br>on infrastructure you own.</h1>
+    <p class="lede">
+      A self-hosted platform for designing LLM-driven workflows on a visual canvas, debugging them
+      step-by-step like code, and deploying them as self-contained agents — to your own hosts,
+      AWS Lambda, or AWS App Runner — with full audit, feedback, and fleet management built in.
+    </p>
+    <div class="stats">
+      <div class="stat"><b>15+</b><span>node types incl. control flow</span></div>
+      <div class="stat"><b>10×</b><span>faster prompt iteration via pin-replay debug</span></div>
+      <div class="stat"><b>5</b><span>deploy targets — 3 fully automated</span></div>
+      <div class="stat"><b>100%</b><span>runs audited, end to end</span></div>
+      <div class="stat"><b>0</b><span>per-seat licence fees</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<section id="business">
+  <div class="wrap">
+    <span class="eyebrow">For decision makers</span>
+    <h2>High-level business outcomes</h2>
+    <p class="sub">What the platform changes for an organisation, in plain terms.</p>
+
+    <div class="grid c2">
+      <div class="card">
+        <h4>💰 Replace per-workflow SaaS fees with owned infrastructure</h4>
+        <p>n8n enterprise, Zapier, and managed agent platforms charge per seat, per execution, or per
+        workflow. This platform runs on hardware you already own (a workstation, a $7–12/month VM, or
+        pay-per-use AWS serverless). The only recurring cost is LLM tokens — which you would pay anyway.</p>
+      </div>
+      <div class="card">
+        <h4>🔒 Data never leaves your perimeter unless you choose</h4>
+        <p>Self-hosted Postgres, self-hosted engine, agents deployable inside your own network. Documents
+        ingested into knowledge graphs stay in your database. The audit trail records <em>everything</em> —
+        inputs, outputs, per-node events — with no third party in the loop.</p>
+      </div>
+      <div class="card">
+        <h4>⚡ Internal automation shipped in hours, not sprints</h4>
+        <p>A working agent — e.g. an HR FAQ bot grounded on your policy documents, with guardrails — is a
+        drag-and-drop exercise plus one click to deploy. Real example: a hiring pipeline (résumé screener,
+        JD drafter, interview briefer, onboarding FAQ) runs in production on this platform today.</p>
+      </div>
+      <div class="card">
+        <h4>📉 LLM spend is visible and controllable</h4>
+        <p>Per-run and per-node token + cost tracking flows into the audit store. The step-debugger replays
+        cached node outputs instead of re-calling the LLM, cutting iteration cost roughly 4–10× during
+        development — the most expensive phase of agent building.</p>
+      </div>
+      <div class="card">
+        <h4>👍 Quality is measured, not assumed</h4>
+        <p>Deployed agents can collect end-user feedback (👍/👎 + comments). Votes stream back to a central
+        inbox with batch analysis and a Keep / Iterate / Retire recommendation per agent — an evidence-based
+        lifecycle instead of "we think it works".</p>
+      </div>
+      <div class="card">
+        <h4>🚪 No vendor lock-in, at any layer</h4>
+        <p>Workflows are plain JSON. The engine is LangGraph/LangChain — the most widely adopted open agent
+        stack. LLM providers are swappable per node (Anthropic, OpenAI, Google). Deploy targets range from a
+        laptop to AWS. Every component can be replaced independently.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="engineering">
+  <div class="wrap">
+    <span class="eyebrow">For engineers</span>
+    <h2>Engineering outcomes</h2>
+    <p class="sub">The technical capabilities that distinguish this from both no-code tools and DIY scripts.</p>
+
+    <div class="grid c2">
+      <div class="card">
+        <h4>🐞 Debug agents like code, not like prayers</h4>
+        <ul>
+          <li><b>Pin-replay</b>: every node's output is captured per run; re-run skips pinned nodes — iterate on one prompt without paying for the rest.</li>
+          <li><b>Edit pins</b>: click 📌 → JSON editor → inject hand-crafted data downstream ("what if the RAG node returned garbage?").</li>
+          <li><b>Breakpoints</b>: right-click → pause <em>before</em> a node, inspect and edit state, resume. Durable via SQLite checkpoints.</li>
+          <li><b>Re-run from here</b>: pins everything upstream automatically.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🧱 Real control flow, not just chains</h4>
+        <ul>
+          <li>IF / Switch / Merge / Loop / Wait / Set-Fields / Filter primitives with a safe expression evaluator.</li>
+          <li>Sub-workflows — compose agents from reusable child flows.</li>
+          <li>HTTP Request node with auth presets, 60s/256KiB hard caps.</li>
+          <li>Conditional routing from router / guardrail / if / switch nodes.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🧠 Reasoning strategies as configuration</h4>
+        <ul>
+          <li>Chain-of-Thought templates (editable, previewable).</li>
+          <li>Tree-of-Thoughts — 3 candidates + LLM judge.</li>
+          <li>Reflexion — draft → critique → revise, genuinely two-step.</li>
+          <li>Self-consistency voting.</li>
+          <li>All selectable per agent node — no code.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>📚 Grounding that ships with the agent</h4>
+        <ul>
+          <li>Knowledge graphs: drop files (PDF/MD/DOCX/TXT) or paste URLs → chunked, embedded into pgvector, visualised as a graph.</li>
+          <li>At deploy time, referenced KGs export as embedded <b>Lance</b> datasets baked into the container — RAG works offline, no phone-home.</li>
+          <li>Provenance per chunk; bind a KG to any agent node.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🔌 MCP-native tooling</h4>
+        <ul>
+          <li>Catalog of Model Context Protocol servers with one-click presets.</li>
+          <li>“Test tool” dry-runs (initialize + tools/list) before you wire one into a flow.</li>
+          <li>Postman-lite sample-call dialog per tool.</li>
+          <li>Per-deploy MCP health probes from the fleet panel.</li>
+          <li>Tool secrets ship encrypted into the agent container (<code>mcp.env</code>, mode 600).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>📜 Audit that survives the network</h4>
+        <ul>
+          <li>Every run opens/closes an audit record; every node emits events with tokens + cost.</li>
+          <li>Deployed agents buffer locally in SQLite and ship asynchronously — central down ≠ runs blocked; events drain when connectivity returns.</li>
+          <li>Reclaim protocol prunes the edge buffer only after the central ACKs.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>📦 Self-contained deploys</h4>
+        <ul>
+          <li>One bundle = engine image + flow JSON + KG Lance tarballs + MCP secrets + LLM keys.</li>
+          <li>The deployed container needs <b>nothing</b> from the platform at runtime; central URL is swappable live via <code>PUT /config/platform</code> (no redeploy).</li>
+          <li>Bearer-token auth per agent with one-click key rotation from the fleet panel.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🔁 Durable runs (checkpointing)</h4>
+        <ul>
+          <li>LangGraph SQLite checkpointer persists state after every node.</li>
+          <li>Runs pause at breakpoints and resume — optionally with operator-edited state (human-in-the-loop approvals).</li>
+          <li>Foundation for long-running and queue-driven workflows.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="architecture">
+  <div class="wrap">
+    <span class="eyebrow">System shape</span>
+    <h2>Architecture at a glance</h2>
+    <p class="sub">Four containers locally; deployed agents are independent satellites.</p>
+
+    <div class="flow">
+      <div class="node"><b>UI</b><span>Vue 3 + PrimeVue + vue-flow<br>:8888</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>API</b><span>FastAPI + asyncpg<br>:8090</span></div>
+      <div class="arrow">→</div>
+      <div class="node hl"><b>Engine</b><span>LangGraph runtime<br>:8100</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>Postgres</b><span>pgvector + audit + settings</span></div>
+    </div>
+
+    <div class="flow">
+      <div class="node hl"><b>Deployed agent</b><span>engine image + baked flow<br>own host / Lambda / App Runner</span></div>
+      <div class="arrow">⇢</div>
+      <div class="node"><b>SQLite edge buffer</b><span>audit + checkpoints<br>/data/*.db</span></div>
+      <div class="arrow">⇢</div>
+      <div class="node"><b>Central ingest</b><span>async, best-effort<br>/api/v1/agent-audit/ingest</span></div>
+    </div>
+
+    <h3>Key design decisions</h3>
+    <div class="tbl-scroll"><table>
+      <tr><th>Decision</th><th>Rationale</th></tr>
+      <tr><td>Engine keeps <b>no database</b></td><td>Deployed agents must be self-contained. Durable state (checkpoints, audit buffer) uses embedded SQLite — same operational profile everywhere.</td></tr>
+      <tr><td>Workflows are <b>plain JSON</b> (nodes + edges + configs)</td><td>Versionable, diffable, portable. The same JSON runs in the designer, the workbench, and a baked container.</td></tr>
+      <tr><td>LangGraph state-merge model</td><td>Each node returns a partial dict; the framework merges. Makes pin-replay and checkpointing natural.</td></tr>
+      <tr><td>Audit is <b>additive and async</b></td><td>The run path never waits on telemetry. Lossy only on container death between ACK windows.</td></tr>
+      <tr><td>Secrets: env-default + DB-override</td><td><code>app_settings</code> (AES-GCM encrypted) overrides env at read time — rotate keys from the UI without restarts.</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="features">
+  <div class="wrap">
+    <span class="eyebrow">Product tour</span>
+    <h2>Feature areas</h2>
+    <p class="sub">Everything an operator touches, grouped by the main menu.</p>
+
+    <div class="grid c3">
+      <div class="card">
+        <h4>Designer <span class="pill indigo">Design</span></h4>
+        <p>Visual DAG canvas. Drag node types from a searchable palette, connect, configure in a side
+        inspector, run inline with live SSE streaming per node. Templates gallery + AI Design
+        (describe the agent in a sentence; the engine generates the flow).</p>
+      </div>
+      <div class="card">
+        <h4>My Workflows <span class="pill indigo">Design</span></h4>
+        <p>Server-persisted workflows (⌘S). Open any one back into the canvas via URL. Version notes
+        per save.</p>
+      </div>
+      <div class="card">
+        <h4>Knowledge Graph <span class="pill indigo">Design</span></h4>
+        <p>Drop files or paste URLs → embedded into pgvector. Visual graph with provenance. Bind to
+        agents; export as Lance for offline deploys.</p>
+      </div>
+      <div class="card">
+        <h4>Deployed <span class="pill green">Manage</span></h4>
+        <p>Fleet table: liveness, target, image, MCP health drill-in, reveal/rotate API keys, repoint
+        platform URL, filters with persistence.</p>
+      </div>
+      <div class="card">
+        <h4>Prompts / CoT <span class="pill green">Manage</span></h4>
+        <p>Reusable prompt + chain-of-thought resources with preview, usage reverse-lookup
+        (which flows/deploys use this), and history.</p>
+      </div>
+      <div class="card">
+        <h4>MCP <span class="pill green">Manage</span></h4>
+        <p>Tool registry + catalog presets, dry-run testing, sample calls, per-deploy health.</p>
+      </div>
+      <div class="card">
+        <h4>Memory <span class="pill green">Manage</span></h4>
+        <p>Session-scoped conversation memory backends bindable to agent nodes.</p>
+      </div>
+      <div class="card">
+        <h4>Runs / Audit <span class="pill green">Manage</span></h4>
+        <p>Every execution searchable: free-text, tags, status. Run detail with node events, tokens,
+        cost. Triggered + deployed + designer runs all land here.</p>
+      </div>
+      <div class="card">
+        <h4>Feedback <span class="pill green">Manage</span></h4>
+        <p>Overview tiles (score + Keep/Iterate/Retire), inbox of comments, audit of decisions.</p>
+      </div>
+      <div class="card">
+        <h4>Triggers <span class="pill blue">Runtime</span></h4>
+        <p>Form Trigger (public form page per slug) and Chat Trigger (session-aware embedded chat)
+        invoke workflows without the designer.</p>
+      </div>
+      <div class="card">
+        <h4>Settings <span class="pill green">Manage</span></h4>
+        <p>Encrypted API keys (LLM + AWS), webhooks, alert configs, schedules, API tokens (PATs with
+        scopes), tag colors, platform URL.</p>
+      </div>
+      <div class="card">
+        <h4>Analytics / Health <span class="pill green">Manage</span></h4>
+        <p>Cost and usage rollups, engine metrics, fleet health dialogs, backup card.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="agents-build-agents">
+  <div class="wrap">
+    <span class="eyebrow">Agent-to-agent</span>
+    <h2>How other AI agents build agents on this platform</h2>
+    <p class="sub">
+      The platform is designed to be operated by LLM agents, not just humans. Every layer is
+      discoverable over HTTP, documented in machine-readable form, and automatable end to end.
+    </p>
+
+    <h3>Discovery surface</h3>
+    <div class="tbl-scroll"><table>
+      <tr><th>URL</th><th>What an agent learns there</th></tr>
+      <tr><td><code>GET /docs/PLATFORM_GUIDE.md</code></td><td>The full platform API manual — how to author resources, deploy, audit. Served as raw markdown over HTTP, written for LLM consumption.</td></tr>
+      <tr><td><code>GET /docs/RUNTIME_GUIDE.md</code></td><td>The runtime surface a deployed agent exposes — base URLs, auth, run/stream/resume shapes, SSE event types.</td></tr>
+      <tr><td><code>GET &lt;agent&gt;/agent.md</code></td><td>Per-deploy self-description: this agent's base URL, auth mode, baked flow size, copy-paste snippets in curl/Python/Node. The <code>/llms.txt</code> convention applied to agents.</td></tr>
+      <tr><td><code>GET &lt;agent&gt;/openapi.json</code></td><td>Machine-readable contract for any deployed agent.</td></tr>
+      <tr><td><code>GET /api/v1/meta</code> · <code>/diag</code></td><td>Feature flags + one-call health across db, engine, keys, deploys.</td></tr>
+    </table></div>
+
+    <h3>The canonical loop an agent follows</h3>
+    <ol class="steps">
+      <li><b>Authenticate</b><p>Obtain a Personal Access Token (<code>POST /api/v1/api-tokens</code>, scopes: read / write / deploy / admin / feedback). Send as <code>Authorization: Bearer agentic-pat-…</code>.</p></li>
+      <li><b>Design — by hand or by prompt</b><p>Either compose flow JSON directly (nodes/edges/configs — schema in PLATFORM_GUIDE), or call the engine's <code>POST /generate</code> with a natural-language description and a complexity level; it returns a complete runnable workflow.</p></li>
+      <li><b>Resolve capabilities</b><p><code>POST /api/v1/agentic/resolve-flow</code> turns referenced resource ids (prompts, CoT, MCP tools, memory, KGs) into resolved bodies — see exactly what will ship before running.</p></li>
+      <li><b>Test on the shared engine</b><p><code>POST /workflows</code> then <code>POST /workflows/{id}/run</code>; subscribe to <code>GET /runs/{id}/stream</code> (SSE) for token-level progress. Iterate cheaply with <code>pinned_outputs</code> (replay cached nodes) and <code>interrupt_before</code> (pause, inspect state via <code>GET /runs/{id}</code>, patch via <code>POST /runs/{id}/resume</code> with <code>state_updates</code>).</p></li>
+      <li><b>Deploy</b><p><code>POST /api/v1/agentic/deploy/local-proxy</code> (SSH + docker + nginx, fully automated), <code>/aws-lambda/execute</code> or <code>/apprunner/execute</code> (real CloudFormation / App Runner provisioning on the operator's AWS account). The response carries the live URL + a one-time API key.</p></li>
+      <li><b>Operate</b><p>Invoke the deployed agent at <code>POST &lt;base&gt;/workflows/baked/run</code>; monitor via the platform's <code>GET /deploy/agents</code>, rotate keys, read the audit trail at <code>GET /api/v1/agent-audit/runs</code>, and act on feedback scores.</p></li>
+    </ol>
+
+    <h3>Minimal end-to-end example</h3>
+<pre><code># 1. AI-design a workflow from a sentence
+curl -X POST $ENGINE/generate \
+  -d '{"description":"classify support emails, answer billing ones from the KG, escalate the rest","complexity":"intermediate"}'
+
+# 2. Register + run it
+WF=$(curl -X POST $ENGINE/workflows -d @flow.json | jq -r .id)
+RUN=$(curl -X POST $ENGINE/workflows/$WF/run \
+  -d '{"input":"My invoice is wrong","interrupt_before":["escalate"]}' | jq -r .run_id)
+
+# 3. It paused before "escalate" — inspect, patch, resume
+curl $ENGINE/runs/$RUN                       # status: paused, node_results so far
+curl -X POST $ENGINE/runs/$RUN/resume \
+  -d '{"state_updates":{"node_results":{"priority":"P1"}}}'
+
+# 4. Ship it to AWS App Runner for real
+curl -X POST $PLATFORM/api/v1/agentic/deploy/apprunner/execute \
+  -H "Authorization: Bearer $PAT" \
+  -d '{"name":"support-triage","flow_json":"…","region":"us-east-1",
+       "ecr_repository":"…","access_role_arn":"…","auth_enabled":true}'
+# → {"publicUrl":"https://xyz.us-east-1.awsapprunner.com","apiKey":"shown-once"}</code></pre>
+
+    <div class="tip">💡 Deployed agents can also call <b>each other</b>: every agent exposes
+    <code>/agent.md</code> + <code>/openapi.json</code>, so an orchestrator agent can discover a fleet of
+    specialist agents and compose them — the platform becomes a registry of callable capabilities.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="api">
+  <div class="wrap">
+    <span class="eyebrow">Reference</span>
+    <h2>API groups</h2>
+    <p class="sub">Two surfaces: the <b>Platform API</b> (:8090, manages everything) and the <b>Engine API</b>
+    (:8100 shared, or each deployed agent's own base URL).</p>
+
+    <h3>Platform API — <code>/api/v1/…</code></h3>
+    <div class="tbl-scroll"><table>
+      <tr><th>Group</th><th>Prefix</th><th>What it does</th></tr>
+      <tr><td><b>Workflows</b></td><td><code>/agentic/workflows</code></td><td>CRUD over persisted flow JSON; history notes per save; linked-runs lookups. The designer's ⌘S lands here.</td></tr>
+      <tr><td><b>Resources</b></td><td><code>/agentic/resources/*</code></td><td>Prompts, Chain-of-Thought configs, MCP tools, Memory backends — each with usages reverse-lookup, deploy counts, history. Plus <code>/resolve-flow</code> to expand ids into bodies.</td></tr>
+      <tr><td><b>Knowledge Graphs</b></td><td><code>/knowledge-graphs</code>, <code>/agentic/kg</code></td><td>Upload files / ingest URLs, semantic <code>/search?include_content=true</code>, graph CRUD, <code>/export-lance</code> for deploy bundles.</td></tr>
+      <tr><td><b>Deploy</b></td><td><code>/agentic/deploy</code></td><td>Targets discovery; local-proxy (automated SSH deploy, SSE progress variant); DO + Azure manifest emitters; <code>aws-lambda</code> dry-run + <code>/execute</code> (real CloudFormation); <code>apprunner/execute</code> (real); <code>check-creds</code> pre-flight.</td></tr>
+      <tr><td><b>Fleet</b></td><td><code>/agentic/deploy/agents</code></td><td>List deploys with liveness, stale detection, API-key reveal (audited) + rotation (optionally regenerating the deploy artifact), MCP health per deploy, platform-URL repoint.</td></tr>
+      <tr><td><b>Audit</b></td><td><code>/agent-audit</code></td><td><code>/ingest</code> (runs + events, idempotent), runs list with free-text + tag search, run detail with per-node cost, edge-buffer reclaim coordination.</td></tr>
+      <tr><td><b>Feedback</b></td><td><code>/agent-feedback</code></td><td>Vote ingest forwarded from deployed agents, per-agent score rollups, Keep/Iterate/Retire recommendations, inbox.</td></tr>
+      <tr><td><b>Triggers</b></td><td><code>/triggers</code> (public)</td><td>Form render + submit and Chat session endpoints per slug; the engine poller claims pending trigger runs.</td></tr>
+      <tr><td><b>Settings</b></td><td><code>/settings/keys</code></td><td>Encrypted (AES-GCM) key store: Anthropic / OpenAI / Cohere / AWS. DB value overrides env at read time — no restarts.</td></tr>
+      <tr><td><b>API Tokens</b></td><td><code>/api-tokens</code></td><td>PATs with scoped permissions for service-to-service and agent callers.</td></tr>
+      <tr><td><b>Meta / Diag</b></td><td><code>/meta</code>, <code>/diag</code>, <code>/healthz</code></td><td>Feature flags, all-in-one diagnostics, liveness.</td></tr>
+    </table></div>
+
+    <h3>Engine / Deployed-agent API</h3>
+    <div class="tbl-scroll"><table>
+      <tr><th>Group</th><th>Endpoints</th><th>Notes</th></tr>
+      <tr><td><b>Discovery</b> <span class="pill green">public</span></td><td><code>/</code> · <code>/health</code> · <code>/agent.md</code> · <code>/openapi.json</code></td><td>Always unauthenticated — agents can discover before they authenticate.</td></tr>
+      <tr><td><b>Workflows</b></td><td><code>POST/GET/PUT/DELETE /workflows</code></td><td>In-memory registry on the shared engine; a deployed agent has exactly one flow: <code>baked</code>.</td></tr>
+      <tr><td><b>Run</b></td><td><code>POST /workflows/{id}/run</code></td><td>Body: <code>input</code>, <code>metadata.session_id</code> (memory scoping), <code>pinned_outputs</code> (replay cache), <code>interrupt_before</code> (breakpoints).</td></tr>
+      <tr><td><b>Observe</b></td><td><code>GET /runs/{id}</code> · <code>GET /runs/{id}/stream</code></td><td>Poll or SSE. Stream events: <code>workflow_start/complete/error/paused</code>, <code>node_start/stream/complete/error</code>, <code>route_decision</code>, <code>done</code>. Run record exposes <code>captures</code> (per-node state for pinning) and <code>paused_before</code>.</td></tr>
+      <tr><td><b>Control</b></td><td><code>POST /runs/{id}/resume</code> · <code>POST /runs/{id}/cancel</code></td><td>Resume accepts <code>state_updates</code> — human/agent-in-the-loop edits applied before continuing from the SQLite checkpoint.</td></tr>
+      <tr><td><b>AI Design</b></td><td><code>POST /generate</code></td><td>Natural language + complexity → complete workflow JSON.</td></tr>
+      <tr><td><b>Feedback</b> <span class="pill green">public*</span></td><td><code>POST /feedback</code></td><td>Present when enabled at deploy; forwards asynchronously to the central platform.</td></tr>
+      <tr><td><b>Runtime config</b></td><td><code>GET/PUT /config/platform</code></td><td>Swap the central audit/feedback URL + token live; persisted in <code>/data/platform.json</code>. No redeploy when the platform moves.</td></tr>
+      <tr><td><b>Audit edge</b></td><td><code>POST /audit/local/reclaim</code></td><td>Platform-driven pruning of the local SQLite buffer after central ACK.</td></tr>
+    </table></div>
+
+    <div class="note">⚠ Auth model: deployed agents use a per-deploy <b>Bearer key</b> (generated at deploy,
+    shown once, rotatable). Discovery endpoints stay public even in bearer mode. The platform API uses
+    session auth in the UI and <b>PAT tokens</b> for programmatic callers.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="deploy">
+  <div class="wrap">
+    <span class="eyebrow">Shipping</span>
+    <h2>Deploy targets</h2>
+    <p class="sub">One bundle (engine image + flow + KGs + secrets), five destinations.</p>
+
+    <div class="tbl-scroll"><table>
+      <tr><th>Target</th><th>Automation</th><th>Cost (approx.)</th><th>Streaming</th><th>Time limit</th><th>Best for</th></tr>
+      <tr>
+        <td><b>Local proxy</b><br><span style="color:var(--muted);font-size:.78rem">SSH + docker + nginx</span></td>
+        <td><span class="pill green">Fully automated</span><br>SSE progress stream</td>
+        <td>$0 (own host)</td><td>✅</td><td>none</td>
+        <td>Internal agents on hardware you control. The default.</td>
+      </tr>
+      <tr>
+        <td><b>AWS App Runner</b></td>
+        <td><span class="pill green">Fully automated</span><br>boto3 create_service → RUNNING → URL</td>
+        <td>~$5–10/mo light, $25–50 medium</td><td>✅</td><td>none</td>
+        <td><b>Recommended AWS target for agents</b> — native streaming, no timeout.</td>
+      </tr>
+      <tr>
+        <td><b>AWS Lambda</b><br><span style="color:var(--muted);font-size:.78rem">container image + HTTP API</span></td>
+        <td><span class="pill green">Fully automated</span><br>CloudFormation stack → URL</td>
+        <td>~$0.25/1k runs · ~$13/100k</td><td>❌ (API GW buffers)</td><td>15 min hard</td>
+        <td>Short, bursty, non-streaming workloads; true scale-to-zero.</td>
+      </tr>
+      <tr>
+        <td><b>DigitalOcean</b></td>
+        <td><span class="pill amber">Manifest only</span><br>operator runs <code>doctl</code></td>
+        <td>~$5–12/mo</td><td>✅</td><td>none</td>
+        <td>Simple always-on cloud hosting.</td>
+      </tr>
+      <tr>
+        <td><b>Azure VM</b></td>
+        <td><span class="pill amber">Manifest only</span><br>operator runs <code>terraform</code></td>
+        <td>~$15–35/mo</td><td>✅</td><td>none</td>
+        <td>Azure-locked environments.</td>
+      </tr>
+    </table></div>
+
+    <div class="tip">💡 AWS one-time prerequisites: credentials in <b>Settings → AWS keys</b> (encrypted),
+    the engine image mirrored to your ECR (Lambda/App Runner can't pull DockerHub), and for App Runner an
+    ECR-access IAM role. The deploy dialog pre-flights credentials and shows the exact account it will bill
+    <em>before</em> the Execute toggle becomes clickable.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="procon">
+  <div class="wrap">
+    <span class="eyebrow">Honest assessment</span>
+    <h2>Pros &amp; cons</h2>
+    <p class="sub">No product is right for everyone. Here is the truthful trade-off list.</p>
+
+    <div class="procon">
+      <div class="card pro">
+        <h4>✅ Where it shines</h4>
+        <ul>
+          <li><b>Total cost of ownership</b> — no per-seat or per-execution fees; runs on a workstation.</li>
+          <li><b>Debug DX</b> — pin-replay + breakpoints + state editing is ahead of most commercial agent builders.</li>
+          <li><b>Data sovereignty</b> — everything self-hosted; agents run offline-grounded via Lance.</li>
+          <li><b>Real deploys</b> — one click to a live URL on own infra or AWS, with auth + audit wired.</li>
+          <li><b>Agent-operable</b> — machine-readable manuals + PATs + full API coverage mean LLM agents can drive the whole lifecycle.</li>
+          <li><b>Open stack</b> — LangGraph/LangChain underneath; no proprietary DSL to migrate off.</li>
+          <li><b>Everything audited</b> — per-node events, tokens, cost, with edge buffering.</li>
+        </ul>
+      </div>
+      <div class="card con">
+        <h4>⚠️ Where it doesn't (yet)</h4>
+        <ul>
+          <li><b>Single-admin</b> — no multi-user RBAC or SSO yet; wrong fit for large shared teams today.</li>
+          <li><b>Single-host scheduling</b> — no queue mode / horizontal workers; ~hundreds of runs/hour, not tens of thousands.</li>
+          <li><b>Shared-engine runs are in-memory</b> — the runs list resets on engine restart (audit DB keeps the durable history; checkpoints survive but live resume context doesn't yet).</li>
+          <li><b>Integration breadth</b> — MCP + HTTP node cover a lot, but there is no 400-connector catalog like n8n/Zapier.</li>
+          <li><b>AWS deploys need one-time manual prep</b> — ECR image mirror + (App Runner) IAM role; auto-mirroring is on the roadmap.</li>
+          <li><b>No stack update/delete endpoints yet</b> — redeploying the same name to AWS requires deleting the old stack/service first.</li>
+          <li><b>Code node is not sandboxed yet</b> — arbitrary Python in flows is intentionally deferred until proper isolation lands.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="compare">
+  <div class="wrap">
+    <span class="eyebrow">Context</span>
+    <h2>How it compares</h2>
+    <p class="sub">Fair positioning against the three realistic alternatives.</p>
+
+    <div class="tbl-scroll"><table>
+      <tr>
+        <th></th><th>Agentic Platform</th><th>n8n</th><th>AWS Bedrock Agents</th><th>DIY LangGraph</th>
+      </tr>
+      <tr><td><b>Hosting</b></td><td>Self-hosted; agents anywhere</td><td>Self-hosted or cloud (paid)</td><td>AWS-managed only</td><td>Wherever you build it</td></tr>
+      <tr><td><b>Cost model</b></td><td>Infra + tokens only</td><td>Free core; enterprise licence for SSO/RBAC; cloud per-execution</td><td>Pay per request + tokens; AWS lock-in</td><td>Engineering time</td></tr>
+      <tr><td><b>Visual designer</b></td><td>✅ DAG canvas, AI-generate</td><td>✅ mature, 400+ connectors</td><td>❌ console forms</td><td>❌</td></tr>
+      <tr><td><b>Agent debugging</b></td><td>✅ pin-replay, breakpoints, state edit</td><td>partial (pinned data, no breakpoints)</td><td>traces only, black box</td><td>whatever you build</td></tr>
+      <tr><td><b>Explicit control flow</b></td><td>✅ IF/Switch/Loop/Merge/Wait/Filter/Sub-flows</td><td>✅</td><td>❌ LLM decides (ReAct)</td><td>✅ in code</td></tr>
+      <tr><td><b>MCP tools</b></td><td>✅ native catalog</td><td>partial/community</td><td>❌ (Action Groups instead)</td><td>DIY</td></tr>
+      <tr><td><b>RAG / grounding</b></td><td>pgvector + offline Lance bundles</td><td>via nodes/external</td><td>managed KB (S3 + OpenSearch)</td><td>DIY</td></tr>
+      <tr><td><b>One-click deploy of an agent</b></td><td>✅ own host / Lambda / App Runner</td><td>n/a (workflows live in n8n)</td><td>✅ (inside Bedrock)</td><td>DIY</td></tr>
+      <tr><td><b>Audit &amp; feedback loop</b></td><td>✅ built-in, edge-buffered</td><td>execution log</td><td>CloudWatch/CloudTrail</td><td>DIY</td></tr>
+      <tr><td><b>Multi-user / SSO</b></td><td>❌ yet</td><td>✅ (paid)</td><td>✅ IAM</td><td>DIY</td></tr>
+      <tr><td><b>Honest verdict</b></td><td>Best for owned, debuggable, deployable AI agents</td><td>Best for broad SaaS-to-SaaS automation</td><td>Best for AWS-native teams wanting zero platform maintenance</td><td>Best when you need something none of these do</td></tr>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<section id="quickstart">
+  <div class="wrap">
+    <span class="eyebrow">Operator manual</span>
+    <h2>Quickstart</h2>
+    <p class="sub">From clean checkout to a deployed, authenticated, audited agent.</p>
+
+    <ol class="steps">
+      <li><b>Boot the stack</b>
+        <p><code>cd deploy/local &amp;&amp; docker compose up -d</code> → UI at <code>:8888</code>, API <code>:8090</code>, engine <code>:8100</code>, Postgres internal. Set <code>ANTHROPIC_API_KEY</code> (and friends) in <code>.env</code> or later via Settings → keys.</p>
+      </li>
+      <li><b>Design a flow</b>
+        <p>Designer → drag an <i>Agent</i> node, a <i>Guardrail</i>, connect them — or open <i>Templates</i>, or describe what you want in <i>AI Design</i>. Configure models, prompts, reasoning strategy in the right-hand inspector.</p>
+      </li>
+      <li><b>Ground it (optional)</b>
+        <p>Knowledge Graph → drop your PDFs / paste URLs → bind the KG to the agent node. Answers now cite your documents.</p>
+      </li>
+      <li><b>Run &amp; debug</b>
+        <p>Test → Run with an input. Watch nodes light up live. Then iterate: <b>Re-run with pins</b> to skip unchanged nodes; click 📌 to hand-edit a cached output; right-click a node for <b>breakpoints</b> and <b>Re-run from here</b>. Paused runs show a <b>Resume</b> button.</p>
+      </li>
+      <li><b>Save</b>
+        <p>⌘S persists to the server (My Workflows). The toolbar shows freshness (“Saved 12s ago”).</p>
+      </li>
+      <li><b>Deploy</b>
+        <p>Ship → Package &amp; Deploy → pick a target. Local proxy streams its progress live. For AWS, set credentials once in Settings, mirror the image to ECR once, then tick <i>Execute now</i> — the dialog returns the live URL and the one-time API key.</p>
+      </li>
+      <li><b>Operate</b>
+        <p>Deployed → watch liveness + MCP health; Runs → every execution with cost; Feedback → real user verdicts and a Keep / Iterate / Retire signal. Rotate keys from the fleet panel; repoint the central URL without redeploying if the platform moves.</p>
+      </li>
+    </ol>
+
+    <h3>Where the docs live</h3>
+    <div class="tbl-scroll"><table>
+      <tr><th>Document</th><th>Audience</th><th>Where</th></tr>
+      <tr><td>PLATFORM_GUIDE.md</td><td>Operators + agents managing the platform</td><td><code>/docs</code> in the UI · <code>GET /docs/PLATFORM_GUIDE.md</code></td></tr>
+      <tr><td>RUNTIME_GUIDE.md</td><td>Anything invoking a deployed agent</td><td><code>GET /docs/RUNTIME_GUIDE.md</code> · summarized per-deploy at <code>&lt;agent&gt;/agent.md</code></td></tr>
+      <tr><td>Architecture (interactive)</td><td>Engineers</td><td><code>/architecture.html</code></td></tr>
+      <tr><td>This overview</td><td>Everyone</td><td><code>/platform-overview.html</code></td></tr>
+    </table></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Agentic Platform — self-hosted AI agent designer, debugger &amp; deployer.<br>
+    Vue 3 · FastAPI · LangGraph · PostgreSQL/pgvector · Docker · AWS (Lambda, App Runner)
+  </div>
+</footer>
+
+</body>
+</html>
