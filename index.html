@@ -63,11 +63,11 @@
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
   }
-  nav .wrap { display: flex; align-items: center; gap: 18px; height: 56px; }
+  nav .wrap { display: flex; align-items: center; gap: 18px; min-height: 56px; padding-top: 8px; padding-bottom: 8px; flex-wrap: wrap; }
   nav .brand { font-weight: 700; font-size: .95rem; color: var(--indigo); white-space: nowrap; }
   nav a { color: var(--muted); text-decoration: none; font-size: .8rem; white-space: nowrap; }
   nav a:hover { color: var(--ink); }
-  nav .links { display: flex; gap: 16px; overflow-x: auto; }
+  nav .links { display: flex; gap: 6px 16px; flex-wrap: wrap; }
 
   /* ---------- hero ---------- */
   header.hero {
