@@ -484,8 +484,9 @@
       </div>
       <div class="card">
         <h4>Runs / Audit <span class="pill green">Manage</span></h4>
-        <p>Every execution searchable: free-text, tags, status. Run detail with node events, tokens,
-        cost. Triggered + deployed + designer runs all land here.</p>
+        <p>Every execution searchable: free-text, tags, status, grouped by agent. Each run expands
+        inline to a human-readable <b>Input · Output · Timeline</b> toggle — JSON is rendered as
+        labelled fields, not a raw blob. Triggered + deployed + designer runs all land here.</p>
       </div>
       <div class="card">
         <h4>Feedback <span class="pill green">Manage</span></h4>
@@ -498,12 +499,25 @@
       </div>
       <div class="card">
         <h4>Settings <span class="pill green">Manage</span></h4>
-        <p>Encrypted API keys (LLM + AWS), webhooks, alert configs, schedules, API tokens (PATs with
-        scopes), tag colors, platform URL.</p>
+        <p>Encrypted API keys (LLM + AWS), centralized <b>LLM key rotation</b> (global + per-project
+        overrides, baked-vs-current fingerprint, bulk re-bake), webhooks, alert configs, schedules,
+        API tokens (PATs with scopes), tag colors, platform URL.</p>
       </div>
       <div class="card">
-        <h4>Analytics / Health <span class="pill green">Manage</span></h4>
-        <p>Cost and usage rollups, engine metrics, fleet health dialogs, backup card.</p>
+        <h4>Budgets <span class="pill green">Manage</span></h4>
+        <p>Spend ceilings scoped global / project / agent, daily and/or monthly, action
+        <b>alert</b> or <b>block</b>. A breached block budget returns <code>429</code> on public
+        triggers until the window resets. Live spend-vs-limit, breach + BLOCKING badges.</p>
+      </div>
+      <div class="card">
+        <h4>Analytics <span class="pill green">Manage</span></h4>
+        <p>Cost-first: overall spend in USD, a sortable / filterable / groupable per-agent cost
+        table, cost-over-time in dollars (day / week / month), a +/- time window, and budget
+        indicators for the current scope. Every NULL-cost run is priced by estimate (flagged “≈”).</p>
+      </div>
+      <div class="card">
+        <h4>Health <span class="pill green">Manage</span></h4>
+        <p>Engine metrics, fleet health dialogs, MCP probe status, backup card.</p>
       </div>
     </div>
   </div>
@@ -583,7 +597,8 @@ curl -X POST $PLATFORM/api/v1/agentic/deploy/apprunner/execute \
       <tr><td><b>Knowledge Graphs</b></td><td><code>/knowledge-graphs</code>, <code>/agentic/kg</code></td><td>Upload files / ingest URLs, semantic <code>/search?include_content=true</code>, graph CRUD, <code>/export-lance</code> for deploy bundles.</td></tr>
       <tr><td><b>Deploy</b></td><td><code>/agentic/deploy</code></td><td>Targets discovery; local-proxy (automated SSH deploy, SSE progress variant); DO + Azure manifest emitters; <code>aws-lambda</code> dry-run + <code>/execute</code> (real CloudFormation); <code>apprunner/execute</code> (real); <code>check-creds</code> pre-flight.</td></tr>
       <tr><td><b>Fleet</b></td><td><code>/agentic/deploy/agents</code></td><td>List deploys with liveness, stale detection, API-key reveal (audited) + rotation (optionally regenerating the deploy artifact), MCP health per deploy, platform-URL repoint.</td></tr>
-      <tr><td><b>Audit</b></td><td><code>/agent-audit</code></td><td><code>/ingest</code> (runs + events, idempotent), runs list with free-text + tag search, run detail with per-node cost, edge-buffer reclaim coordination.</td></tr>
+      <tr><td><b>Audit</b></td><td><code>/agent-audit</code></td><td><code>/ingest</code> (runs + events, idempotent), runs list with free-text + tag search, run detail with per-node cost, analytics (<code>cost-by-agent</code> with project rollups, <code>cost-over-time</code> with day/week/month buckets), cost estimation for NULL-cost runs + <code>backfill-cost-estimates</code>, edge-buffer reclaim coordination.</td></tr>
+      <tr><td><b>Budgets</b></td><td><code>/agentic/budgets</code></td><td>Cost ceilings scoped global / project / agent, daily &amp; monthly limits, <code>alert</code> or <code>block</code> action; <code>/status</code> rolls up live spend; scheduler fires <code>budget.alert</code>/<code>budget.block</code> webhooks and gates public triggers with <code>429</code> on a breached block budget.</td></tr>
       <tr><td><b>Feedback</b></td><td><code>/agent-feedback</code></td><td>Vote ingest forwarded from deployed agents, per-agent score rollups, Keep/Iterate/Retire recommendations, inbox.</td></tr>
       <tr><td><b>Triggers</b></td><td><code>/triggers</code> (public)</td><td>Form render + submit and Chat session endpoints per slug; the engine poller claims pending trigger runs.</td></tr>
       <tr><td><b>Settings</b></td><td><code>/settings/keys</code></td><td>Encrypted (AES-GCM) key store: Anthropic / OpenAI / Cohere / AWS. DB value overrides env at read time — no restarts.</td></tr>
